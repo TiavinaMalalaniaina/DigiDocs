@@ -74,6 +74,11 @@
                     </svg>
                 </button>
             </div>
+            <div class="flex items-center justify-end">
+                <span>
+                    Bonjour@((ViewData["UserName"] != null) ? $", {ViewData["UserName"]}" : "")!
+                </span>
+            </div>
         </div>
     </div>
 </nav>

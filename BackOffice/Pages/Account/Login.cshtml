@@ -16,16 +16,23 @@
             <h2 class="text-2xl lg:text-3xl font-bold text-gray-900">
                 Connection à la plateforme
             </h2>
-            <form class="mt-8 space-y-6" action="#">
+            <form class="mt-8 space-y-6" method="post">
                 <div>
                     <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Email</label>
-                    <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="name@gmail.com" required>
+                    <input asp-for="Email" type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="name@gmail.com" required>
+                        <span asp-validation-for="Email" style="color:red"></span>
                 </div>
                 <div>
                     <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Mot de Passe</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
+                    <input asp-for="Password" type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
+                    <span asp-validation-for="Password" style="color:red"></span>
                 </div>
-                <div class="flex items-start">
+                    <validation-summary asp-validation-summary="All" class="text-red-500"></validation-summary>
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div style="color:red">@Model.ErrorMessage</div>
+                    }
+                @* <div class="flex items-start">
                     <div class="flex items-center h-5">
                     <input id="remember" aria-describedby="remember" name="remember" type="checkbox" class="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" required>
                     </div>
@@ -33,7 +40,7 @@
                     <label for="remember" class="font-medium text-gray-900">Se Souvenir de moi</label>
                     </div>
                     <a href="#" class="text-sm text-teal-500 hover:underline ml-auto">Mot de passe oublié?</a>
-                </div>
+                </div> *@
                 <button type="submit" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-base px-5 py-3 w-full sm:w-auto text-center">Se Connecter</button>
                 <div class="text-sm font-medium text-gray-500">
                     Pas encore enregistré? <a href="https://themewagon.github.io/windster/authentication/sign-up/" class="text-teal-500 hover:underline">Créé un compte</a>
