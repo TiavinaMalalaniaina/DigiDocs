@@ -5,6 +5,7 @@ namespace BackOffice.Services
     public interface IDocumentService
     {
         Task<int> GetCountAsync();
+        Task<List<Document>> GetDocumentASync(string index, int pageNumber, int pageSize);
         Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize);
         Task<IEnumerable<Document>> GetAllDocumentsAsync();
         Task<Document?> GetDocumentByIdAsync(int id);

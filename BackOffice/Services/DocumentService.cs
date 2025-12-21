@@ -57,12 +57,13 @@ namespace BackOffice.Services
 
                 await AddDocumentAsync(doc);
             }
-
-            // Nettoyer le dossier temporaire
             Directory.Delete(tempFolder, true);
         }
 
         public Task<int> GetCountAsync() => _documentRepository.GetCountAsync();
+
+
+        public Task<List<Document>> GetDocumentASync(string index, int pageNumber, int pageSize) => _documentRepository.GetDocumentsAsync(index, pageNumber, pageSize);
         public Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize) => _documentRepository.GetPagedAsync(pageNumber, pageSize);
 
 

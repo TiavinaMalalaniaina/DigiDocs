@@ -28,10 +28,14 @@ namespace BackOffice.Pages.Documents
         [BindProperty]
         public IFormFile? UploadFile { get; set; }
 
+        [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 20;
         public int TotalDocuments { get; set; }
         public int TotalPages => (int)Math.Ceiling((double)TotalDocuments / PageSize);
+
+        [BindProperty(SupportsGet = true)]
+        public string Index { get; set; }
 
         [BindProperty]
         public IFormFile? ZipFile { get; set; }

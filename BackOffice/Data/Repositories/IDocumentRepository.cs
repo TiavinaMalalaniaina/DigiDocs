@@ -12,6 +12,7 @@ namespace BackOffice.Data.Repositories
         Task UpdateAsync(Document document);
         Task DeleteAsync(int id);
         Task<int> GetCountAsync();
+        Task<List<Document>> GetDocumentsAsync(string index, int pageNumber, int pageSize);
         Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize);
     }
 }

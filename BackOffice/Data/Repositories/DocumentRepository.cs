@@ -23,6 +23,66 @@ namespace BackOffice.Data.Repositories
             return (int)await ((SqlCommand)cmd).ExecuteScalarAsync();
         }
 
+        public async Task<List<Document>> GetDocumentsAsync(string index, int pageNumber, int pageSize)
+        {
+            var list = new List<Document>();
+
+            using var conn = _db.CreateConnection();
+            using var cmd = conn.CreateCommand();
+
+            cmd.CommandText = @"
+                SELECT *
+                FROM Documents
+                WHERE (@Index IS NULL OR
+                       Title LIKE '%' + @Index + '%' OR
+                       FileName LIKE '%' + @Index + '%' OR
+                       Category LIKE '%' + @Index + '%')
+                ORDER BY UploadDate DESC
+                OFFSET @Offset ROWS
+                FETCH NEXT @PageSize ROWS ONLY;
+            ";
+
+            var indexParam = cmd.CreateParameter();
+            indexParam.ParameterName = "@Index";
+            indexParam.Value = string.IsNullOrWhiteSpace(index)
+                ? DBNull.Value
+                : index;
+            cmd.Parameters.Add(indexParam);
+
+            var offsetParam = cmd.CreateParameter();
+            offsetParam.ParameterName = "@Offset";
+            offsetParam.Value = (pageNumber - 1) * pageSize;
+            cmd.Parameters.Add(offsetParam);
+
+            var sizeParam = cmd.CreateParameter();
+            sizeParam.ParameterName = "@PageSize";
+            sizeParam.Value = pageSize;
+            cmd.Parameters.Add(sizeParam);
+
+            conn.Open();
+
+            using var reader = await ((SqlCommand)cmd).ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                list.Add(new Document
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                    Title = reader.GetString(reader.GetOrdinal("Title")),
+                    FileName = reader.GetString(reader.GetOrdinal("FileName")),
+                    Category = reader.GetString(reader.GetOrdinal("Category")),
+                    UploadDate = reader.GetDateTime(reader.GetOrdinal("UploadDate")),
+                    DownloadCount = reader.GetInt32(reader.GetOrdinal("DownloadCount")),
+                    AccessLevel = reader.GetString(reader.GetOrdinal("AccessLevel")),
+                    ContentType = Enum.Parse<ContentTypeDocument>(
+                        reader.GetString(reader.GetOrdinal("ContentType")))
+                });
+            }
+
+            return list;
+        }
+
+
         public async Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize)
         {
             var list = new List<Document>();
