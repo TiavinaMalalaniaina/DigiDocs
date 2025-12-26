@@ -28,7 +28,8 @@ CREATE TABLE Documents (
     FileName NVARCHAR(300) NOT NULL,
     ContentType NVARCHAR(100) NOT NULL,
 
-    AccessLevel NVARCHAR(50) NOT NULL
+    AccessLevel NVARCHAR(50) NOT NULL,
+    Category NVARCHAR(50) NOT NULL
 );
 GO
 

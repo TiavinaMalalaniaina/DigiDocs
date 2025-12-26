@@ -14,11 +14,11 @@ namespace BackOffice.Pages.Account
 
         [BindProperty]
         [Required(ErrorMessage = "Email Obligatoire")]
-        public required string Email { get; set; }
+        public required string Email { get; set; } = "admin@mail.com";
         [BindProperty]
         [Required(ErrorMessage = "Mot de passe Obligatoire")]
         [DataType(DataType.Password)]
-        public required string Password { get; set; }
+        public required string Password { get; set; } = "hash123";
 
         [TempData]
         public string? ErrorMessage { get; set; }

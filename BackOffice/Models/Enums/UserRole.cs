@@ -3,8 +3,8 @@
     public enum UserRole
     {
         Admin,
-        Standard,
+        Basic,
         Premium,
-        VIP
+        VIP   
     }
 }

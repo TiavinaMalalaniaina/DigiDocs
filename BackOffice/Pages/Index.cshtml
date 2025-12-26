@@ -5,25 +5,110 @@
 }
 
 <div class="pt-6 px-4">
-    <div class="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex-shrink-0">
-                    <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">$45,385</span>
-                    <h3 class="text-base font-normal text-gray-500">Sales this week</h3>
-                </div>
-                <div class="flex items-center justify-end flex-1 text-green-500 text-base font-bold">
-                    12.5%
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                              d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                              clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </div>
-            <div id="main-chart"></div>
-
+        <!-- Graphe évolution des téléchargements -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                Évolution des téléchargements
+            </h3>
+            <canvas id="downloadsChart" height="120"></canvas>
         </div>
+        <!-- Tableau documents les plus téléchargés -->
+        <div class="bg-white shadow rounded-lg p-6 xl:col-span-2">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                Documents les plus téléchargés
+            </h3>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Document</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Catégorie</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Téléchargements</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-2">Rapport Annuel 2024</td>
+                            <td class="px-4 py-2">Finance</td>
+                            <td class="px-4 py-2 font-semibold">1 245</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Guide Utilisateur</td>
+                            <td class="px-4 py-2">Documentation</td>
+                            <td class="px-4 py-2 font-semibold">980</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2">Contrat Type</td>
+                            <td class="px-4 py-2">Juridique</td>
+                            <td class="px-4 py-2 font-semibold">730</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pie chart par catégorie -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                Téléchargements par catégorie
+            </h3>
+            <canvas id="categoryChart" height="60" width="60"></canvas>
+        </div>
+
+        <!-- Pie chart par catégorie -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                Distribution des rôles
+            </h3>
+            <canvas id="rolesChart" height="120"></canvas>
+        </div>
+
+
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Line chart - téléchargements
+    new Chart(document.getElementById('downloadsChart'), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
+            datasets: [{
+                data: [120, 190, 300, 280, 350, 420],
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Pie chart - catégories
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Finance', 'Documentation', 'Juridique', 'Marketing'],
+            datasets: [{
+                data: [40, 30, 20, 10],
+                backgroundColor: ['#2563eb', '#16a34a', '#f59e0b', '#dc2626']
+            }]
+        }
+    });
+
+    // Pie chart - rôles
+    new Chart(document.getElementById('rolesChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Admin', 'Utilisateur', 'Manager'],
+            datasets: [{
+                data: [15, 70, 15],
+                backgroundColor: ['#7c3aed', '#2563eb', '#16a34a']
+            }]
+        }
+    });
+</script>
