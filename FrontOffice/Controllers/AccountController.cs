@@ -53,16 +53,6 @@ public class AccountController : Controller
     public IActionResult Register(RegisterViewModel model)
     {
         var hash = UserRepository.HashPassword(model.Password);
-
-        // var user = new User
-        // {
-        //     Id = new Random().Next(1000, 9999),
-        //     Username = model.Username,
-        //     Email = model.Email,
-        //     PasswordHash = hash,
-        //     Role = "standard"
-        // };
-
         var user = new User
         {
             Username = model.Username,

@@ -14,19 +14,6 @@ public class DocumentsController : Controller
         _repo = repo;
     }
 
-    // public IActionResult Index()
-    // {
-    //     if (HttpContext.Session.GetInt32("UserId") == null)
-    //     {
-    //         return RedirectToAction("Login", "Account");
-    //     }
-
-    //     var documents = _repo.GetAll();
-    //     ViewBag.Role = HttpContext.Session.GetString("Role");
-
-    //     return View(documents);
-    // }
-
     public IActionResult Download(int id)
     {
         var userId = HttpContext.Session.GetInt32("UserId");
@@ -47,53 +34,6 @@ public class DocumentsController : Controller
 
         return File(document.FileData, document.ContentType, document.FileName);
     }
-
-    // public IActionResult Index(string? category)
-    // {
-    //     var role = HttpContext.Session.GetString("Role");
-    //     if (role == null)
-    //         return RedirectToAction("Login", "Auth");
-
-    //     var documents = _documentRepository
-    //         .GetAccessibleDocuments(role, category);
-
-    //     ViewBag.SelectedCategory = category;
-    //     return View(documents);
-    // }
-
-    // public IActionResult Index(string? category)
-    // {
-    //     var role = HttpContext.Session.GetString("Role");
-    //     if (role == null)
-    //         return RedirectToAction("Login", "Account");
-
-    //     var documents = _repo.GetAccessibleDocuments(role, category);
-
-    //     ViewBag.Role = role;
-    //     ViewBag.SelectedCategory = category;
-
-    //     return View(documents);
-    // }
-
-
-
-
-    // public IActionResult Index(string? category, string sort = "date")
-    // {
-    //     var role = HttpContext.Session.GetString("Role");
-    //     if (role == null)
-    //         return RedirectToAction("Login", "Account");
-
-    //     var documents = _repo.GetAccessibleDocuments(role, category, sort);
-
-    //     ViewBag.Role = role;
-    //     ViewBag.SelectedCategory = category;
-    //     ViewBag.CurrentSort = sort;
-
-    //     return View(documents);
-    // }
-
-
 
     public IActionResult Index(
     string? category,

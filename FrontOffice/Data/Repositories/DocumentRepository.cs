@@ -89,108 +89,6 @@ namespace FrontOffice.Data.Repositories
             cmd.ExecuteNonQuery();
         }
 
-        // public List<Document> GetAccessibleDocuments(string userRole, string? category)
-        // {
-        //     int userLevel = AccessHelper.GetRoleLevel(userRole);
-        //     var documents = new List<Document>();
-
-        //     using var conn = new SqlConnection(_connectionString);
-        //     conn.Open();
-
-        //     var sql = @"
-        //         SELECT Id, Title, Category, AccessLevel
-        //         FROM Documents
-        //         WHERE
-        //             CASE AccessLevel
-        //                 WHEN 'standard' THEN 1
-        //                 WHEN 'premium' THEN 2
-        //                 WHEN 'vip' THEN 3
-        //             END <= @UserLevel
-        //     ";
-
-        //     if (!string.IsNullOrEmpty(category))
-        //         sql += " AND Category = @Category";
-
-        //     var cmd = new SqlCommand(sql, conn);
-        //     cmd.Parameters.AddWithValue("@UserLevel", userLevel);
-
-        //     if (!string.IsNullOrEmpty(category))
-        //         cmd.Parameters.AddWithValue("@Category", category);
-
-        //     using var reader = cmd.ExecuteReader();
-        //     while (reader.Read())
-        //     {
-        //         documents.Add(new Document
-        //         {
-        //             Id = (int)reader["Id"],
-        //             Title = reader["Title"].ToString()!,
-        //             Category = reader["Category"].ToString()!,
-        //             AccessLevel = reader["AccessLevel"].ToString()!
-        //         });
-        //     }
-
-        //     return documents;
-        // }
-
-
-
-
-
-
-
-        // public List<Document> GetAccessibleDocuments(string userRole, string? category, string sort = "date")
-        // {
-        //     int userLevel = AccessHelper.GetRoleLevel(userRole);
-        //     var documents = new List<Document>();
-
-        //     using var conn = new SqlConnection(_connectionString);
-        //     conn.Open();
-
-        //     string orderBy = sort switch
-        //     {
-        //         "popular" => "DownloadCount DESC",
-        //         _ => "UploadDate DESC"
-        //     };
-
-        //     var sql = $@"
-        //         SELECT Id, Title, Category, AccessLevel, DownloadCount, UploadDate
-        //         FROM Documents
-        //         WHERE
-        //             CASE AccessLevel
-        //                 WHEN 'standard' THEN 1
-        //                 WHEN 'premium' THEN 2
-        //                 WHEN 'vip' THEN 3
-        //             END <= @UserLevel
-        //     ";
-
-        //     if (!string.IsNullOrEmpty(category))
-        //         sql += " AND Category = @Category";
-
-        //     sql += $" ORDER BY {orderBy}";
-
-        //     var cmd = new SqlCommand(sql, conn);
-        //     cmd.Parameters.AddWithValue("@UserLevel", userLevel);
-
-        //     if (!string.IsNullOrEmpty(category))
-        //         cmd.Parameters.AddWithValue("@Category", category);
-
-        //     using var reader = cmd.ExecuteReader();
-        //     while (reader.Read())
-        //     {
-        //         documents.Add(new Document
-        //         {
-        //             Id = (int)reader["Id"],
-        //             Title = reader["Title"].ToString()!,
-        //             Category = reader["Category"].ToString()!,
-        //             AccessLevel = reader["AccessLevel"].ToString()!,
-        //             DownloadCount = (int)reader["DownloadCount"],
-        //             UploadDate = (DateTime)reader["UploadDate"]
-        //         });
-        //     }
-
-        //     return documents;
-        // }
-
         public List<Document> GetAccessibleDocuments(
         string userRole,
         string? category,
@@ -243,15 +141,6 @@ namespace FrontOffice.Data.Repositories
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                // documents.Add(new Document
-                // {
-                //     Id = (int)reader["Id"],
-                //     Title = reader["Title"].ToString()!,
-                //     Category = reader["Category"].ToString()!,
-                //     AccessLevel = reader["AccessLevel"].ToString()!,
-                //     DownloadCount = (int)reader["DownloadCount"],
-                //     UploadDate = (DateTime)reader["UploadDate"]
-                // });
                 documents.Add(new Document
                 {
                     Id = (int)reader["Id"],
