@@ -53,3 +53,16 @@ CREATE TABLE DocumentDownloads (
         ON DELETE CASCADE
 );
 GO
+
+
+
+
+UPDATE Documents
+SET DownloadCount = (
+    SELECT COUNT(*)
+    FROM DocumentDownloads
+    WHERE DocumentId = Documents.Id
+);
+
+
+DBCC CHECKIDENT ('NomDeLaTable', RESEED, 0);

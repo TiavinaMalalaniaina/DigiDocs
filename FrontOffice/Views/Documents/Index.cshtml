@@ -1,0 +1,312 @@
+@{
+    Layout = null;
+}
+@model List<FrontOffice.Models.Document>
+@using FrontOffice.Helpers
+
+<!-- FILTRE + TRI -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Skydash Admin</title>
+        <link rel="stylesheet" href="/vendors/feather/feather.css">
+        <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+        <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+        <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="/vendors/ti-icons/css/themify-icons.css">
+        <link rel="stylesheet" type="/text/css" href="js/select.dataTables.min.css">
+        <link rel="stylesheet" href="/css/vertical-layout-light/style.css">
+        <link rel="shortcut icon" href="/images/favicon.png" />
+    </head>
+    <body>
+        <div class="container-scroller">
+            <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+                <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                    <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="/images/logo.svg" class="mr-2" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="/images/logo-mini.svg" alt="logo"/></a>
+                </div>
+                <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                        <span class="icon-menu"></span>
+                    </button>
+                    <ul class="navbar-nav mr-lg-2">
+                        <li class="nav-item nav-search d-none d-lg-block">
+                            <div class="input-group">
+                                <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                                    <span class="input-group-text" id="search">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                        <i class="icon-bell mx-0"></i>
+                        <span class="count"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                        <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                        
+                        </div>
+                    </li>
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                            <img src="/images/faces/face28.jpg" alt="profile"/>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="/">
+                            <i class="ti-power-off text-primary"></i>
+                            Logout
+                        </a>
+                        </div>
+                    </li>
+                    </ul>
+                    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                        <span class="icon-menu"></span>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="container-fluid page-body-wrapper">
+                <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="icon-grid menu-icon"></i>
+                                <span class="menu-title">Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="main-panel">
+                    <div class="content-wrapper">
+
+                        <form method="get" class="mb-3">
+                        
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+
+                                            <select name="category" class="form-control">
+                                                <option value="">Toutes les catégories</option>
+                                                <option value="presentation" selected="@(ViewBag.SelectedCategory == "presentation")">
+                                                    Présentation
+                                                </option>
+                                                <option value="text" selected="@(ViewBag.SelectedCategory == "text")">
+                                                    Texte
+                                                </option>
+                                                <option value="education" selected="@(ViewBag.SelectedCategory == "education")">
+                                                    Éducation
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <select name="sort" class="form-control">
+                                                <option value="date" selected="@(ViewBag.CurrentSort == "date")">
+                                                    Plus récents
+                                                </option>
+                                                <option value="popular" selected="@(ViewBag.CurrentSort == "popular")">
+                                                    Plus populaires
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-md-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-title mb-0">Les Produits</p>
+                                    <div class="table-responsive">
+                                    <table class="table table-striped table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th>Titre</th>
+                                                <th>Catégorie</th>
+                                                <th>Accès</th>
+                                                <th>Téléchargements</th>
+                                                <th>Action</th>
+                                            </tr>  
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var doc in Model)
+                                            {
+                                                bool canDownload = AccessHelper.CanDownload(ViewBag.Role, doc.AccessLevel);
+                                                <tr>
+                                                    <td class="font-weight-bold">@doc.Title</td>
+                                                    <td>@doc.Category</td>
+                                                    <td>@doc.AccessLevel</td>
+                                                    <td>@doc.DownloadCount</td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#detailsModal-@doc.Id">
+                                                            Détails
+                                                        </button>
+                                                        @if (canDownload)
+                                                        {
+                                                            <a class="btn btn-success btn-sm ms-1"
+                                                            href="/Documents/Download/@doc.Id">
+                                                                Télécharger
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-secondary btn-sm ms-1" disabled>
+                                                                Accès réservé
+                                                            </button>
+                                                        }
+                                                    </td>
+                                                </tr>
+
+                                                <div class="modal fade" id="detailsModal-@doc.Id" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-md modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Détails du document</h5>
+                                                                <button type="button"
+                                                                        class="btn-close"
+                                                                        data-bs-dismiss="modal">
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p><strong>Titre :</strong> @doc.Title</p>
+                                                                <p><strong>Description :</strong><br />
+                                                                    @(string.IsNullOrEmpty(doc.Description) ? "Aucune description" : doc.Description)
+                                                                </p>
+                                                                <p><strong>Nom du fichier :</strong> @doc.FileName</p>
+                                                                <p><strong>Catégorie :</strong> @doc.Category</p>
+                                                                <p><strong>Niveau d'accès :</strong> @doc.AccessLevel</p>
+                                                                <p><strong>Date d’upload :</strong>
+                                                                    @doc.UploadDate.ToString("dd/MM/yyyy")
+                                                                </p>
+                                                                <p><strong>Téléchargements :</strong> @doc.DownloadCount</p>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">
+                                                                    Fermer
+                                                                </button>
+
+                                                                @if (canDownload)
+                                                                {
+                                                                    <a class="btn btn-success"
+                                                                    href="/Documents/Download/@doc.Id">
+                                                                        Télécharger
+                                                                    </a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <br>
+
+                                <!-- PAGINATION -->
+                                @if (ViewBag.TotalPages > 1)
+                                {
+                                    <nav class="d-flex justify-content-center">
+                                        <ul class="pagination">
+
+                                            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                                <a class="page-link"
+                                                href="@Url.Action("Index", new {
+                                                    page = ViewBag.CurrentPage - 1,
+                                                    category = ViewBag.SelectedCategory,
+                                                    sort = ViewBag.CurrentSort
+                                                })">
+                                                    Précédent
+                                                </a>
+                                            </li>
+
+                                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                            {
+                                                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                                    <a class="page-link"
+                                                    href="@Url.Action("Index", new {
+                                                        page = i,
+                                                        category = ViewBag.SelectedCategory,
+                                                        sort = ViewBag.CurrentSort
+                                                    })">
+                                                        @i
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                                <a class="page-link"
+                                                href="@Url.Action("Index", new {
+                                                    page = ViewBag.CurrentPage + 1,
+                                                    category = ViewBag.SelectedCategory,
+                                                    sort = ViewBag.CurrentSort
+                                                })">
+                                                    Suivant
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+                    </div>
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.themewagon.com/" target="_blank">Themewagon</a></span> 
+                    </div>
+                </footer> 
+            </div>
+        </div>
+
+        <script src="/vendors/js/vendor.bundle.base.js"></script>
+        <script src="/vendors/chart.js/Chart.min.js"></script>
+        <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+        <script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+        <script src="/js/dataTables.select.min.js"></script>
+
+        <script src="/js/off-canvas.js"></script>
+        <script src="/js/hoverable-collapse.js"></script>
+        <script src="/js/template.js"></script>
+        <script src="/js/settings.js"></script>
+        <script src="/js/todolist.js"></script>
+
+        <script src="/js/dashboard.js"></script>
+        <script src="/js/Chart.roundedBarCharts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>
