@@ -64,17 +64,10 @@ namespace BackOffice.Services
 
 
         public Task<List<Document>> GetDocumentASync(string index, int pageNumber, int pageSize) => _documentRepository.GetDocumentsAsync(index, pageNumber, pageSize);
-        public Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize) => _documentRepository.GetPagedAsync(pageNumber, pageSize);
-
-
-        public async Task<IEnumerable<Document>> GetAllDocumentsAsync()
-        {
-            return await _documentRepository.GetAllAsync();
-        }
 
         public async Task<Document?> GetDocumentByIdAsync(int id)
         {
-            return await _documentRepository.GetByIdAsync(id);
+            return await _documentRepository.GetDocumentByIdAsync(id);
         }
 
         public async Task AddDocumentAsync(Document document)

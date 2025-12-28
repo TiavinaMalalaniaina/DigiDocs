@@ -6,13 +6,11 @@ namespace BackOffice.Data.Repositories
 {
     public interface IDocumentRepository
     {
-        Task<Document?> GetByIdAsync(int id);
-        Task<IEnumerable<Document>> GetAllAsync();
         Task AddAsync(Document document);
         Task UpdateAsync(Document document);
         Task DeleteAsync(int id);
         Task<int> GetCountAsync();
         Task<List<Document>> GetDocumentsAsync(string index, int pageNumber, int pageSize);
-        Task<List<Document>> GetPagedAsync(int pageNumber, int pageSize);
+        Task<Document> GetDocumentByIdAsync(int id);
     }
 }

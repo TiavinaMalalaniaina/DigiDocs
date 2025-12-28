@@ -12,7 +12,7 @@ namespace BackOffice.Services
             _repo = repo;
         }
 
-        public Task UpdateUserRoleAsync(User user) => _repo.UpdateUserRole(user);
+        public Task UpdateUserRoleAsync(User user) => _repo.UpdateUserRoleAsync(user);
 
         public Task<int> GetUserCountAsync() => _repo.GetCountAsync();
 
