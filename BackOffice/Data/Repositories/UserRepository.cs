@@ -8,13 +8,11 @@ namespace BackOffice.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DbConnection _db;
         private readonly DigiDocsDbContext _context;
 
 
-        public UserRepository(DbConnection db, DigiDocsDbContext context)
+        public UserRepository(DigiDocsDbContext context)
         {
-            _db = db;
             _context = context;
         }
 
