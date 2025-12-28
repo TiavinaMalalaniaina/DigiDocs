@@ -1,6 +1,8 @@
 using BackOffice.Data;
 using BackOffice.Data.Repositories;
 using BackOffice.Services;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,12 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddDbContext<DigiDocsDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    )
+);
 
 // In-memory cache for session management
 builder.Services.AddDistributedMemoryCache();

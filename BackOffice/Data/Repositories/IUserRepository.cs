@@ -7,6 +7,6 @@ namespace BackOffice.Data.Repositories
         User Login(string email, string password);
         Task<List<User>> GetUsersAsync(string index, int page, int pageSize);
         Task<int> GetCountAsync();
-        Task UpdateUserRole(User user);
+        Task UpdateUserRoleAsync(User user);
     }
 }
