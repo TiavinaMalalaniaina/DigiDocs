@@ -70,7 +70,7 @@ namespace BackOffice.Pages.Documents
         {
             PageNumber = pageNumber ?? 1;
             TotalDocuments = await _documentService.GetCountAsync();
-            Documents = await _documentService.GetPagedAsync(PageNumber, PageSize);
+            Documents = await _documentService.GetDocumentASync(String.Empty, PageNumber, PageSize);
         }
 
         public async Task<IActionResult> OnPostAddAsync()

@@ -18,6 +18,9 @@ namespace BackOffice.Data
             modelBuilder.Entity<User>()
                 .Property(u => u.Role)
                 .HasConversion<string>();
+            modelBuilder.Entity<Document>()
+                .Property(d => d.ContentType)
+                .HasConversion<string>();
         }
 
     }
