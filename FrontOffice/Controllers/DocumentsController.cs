@@ -32,7 +32,7 @@ public class DocumentsController : Controller
         _repo.LogDownload(document.Id, userId.Value);
         _repo.IncrementDownloadCount(document.Id);
 
-        return File(document.FileData, document.ContentType, document.FileName);
+        return File(document.FileData, "application/octet-stream", document.FileName);
     }
 
     public IActionResult Index(

@@ -5,60 +5,51 @@
 }
 
 <div class="pt-6 px-4">
+
+    <!-- Documents les plus téléchargés -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            Documents les plus téléchargés
+        </h3>
+
+        <button onclick="exportPdf()"
+                style="margin-bottom:12px; padding:8px 12px; background:#2563eb; color:white; border:none; border-radius:4px;">
+            Exporter en PDF
+        </button>
+
+        <div class="overflow-x-auto">
+            <table id="docsTable" class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Document</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Catégorie</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Téléchargements</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var doc in Model.MostPopularDocuments)
+                    {
+                        <tr>
+                            <td class="px-4 py-2">@doc.Title</td>
+                            <td class="px-4 py-2">@doc.Category</td>
+                            <td class="px-4 py-2 font-semibold">@doc.DownloadCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Charts -->
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
-        <!-- Graphe évolution des téléchargements -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                Évolution des téléchargements
-            </h3>
-            <canvas id="downloadsChart" height="120"></canvas>
-        </div>
-        <!-- Tableau documents les plus téléchargés -->
-        <div class="bg-white shadow rounded-lg p-6 xl:col-span-2">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                Documents les plus téléchargés
-            </h3>
-
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Document</th>
-                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Catégorie</th>
-                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Téléchargements</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-4 py-2">Rapport Annuel 2024</td>
-                            <td class="px-4 py-2">Finance</td>
-                            <td class="px-4 py-2 font-semibold">1 245</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-2">Guide Utilisateur</td>
-                            <td class="px-4 py-2">Documentation</td>
-                            <td class="px-4 py-2 font-semibold">980</td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-2">Contrat Type</td>
-                            <td class="px-4 py-2">Juridique</td>
-                            <td class="px-4 py-2 font-semibold">730</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Pie chart par catégorie -->
         <div class="bg-white shadow rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-4">
                 Téléchargements par catégorie
             </h3>
-            <canvas id="categoryChart" height="60" width="60"></canvas>
+            <canvas id="categoryChart" height="120"></canvas>
         </div>
 
-        <!-- Pie chart par catégorie -->
         <div class="bg-white shadow rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-4">
                 Distribution des rôles
@@ -66,49 +57,104 @@
             <canvas id="rolesChart" height="120"></canvas>
         </div>
 
-
     </div>
 </div>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // Line chart - téléchargements
-    new Chart(document.getElementById('downloadsChart'), {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun'],
-            datasets: [{
-                data: [120, 190, 300, 280, 350, 420],
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.2)',
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: { responsive: true }
-    });
+    // --------- CHART CATEGORIES ----------
+    const categoryDownloads = @Html.Raw(Model.CategoryDownloads);
+    const categoryLabels = categoryDownloads.map(x => x.Category);
+    const categoryData = categoryDownloads.map(x => x.TotalDownloads);
 
-    // Pie chart - catégories
     new Chart(document.getElementById('categoryChart'), {
         type: 'pie',
         data: {
-            labels: ['Finance', 'Documentation', 'Juridique', 'Marketing'],
+            labels: categoryLabels,
             datasets: [{
-                data: [40, 30, 20, 10],
-                backgroundColor: ['#2563eb', '#16a34a', '#f59e0b', '#dc2626']
+                data: categoryData,
+                backgroundColor: [
+                    '#2563eb', '#1d4ed8', '#3b82f6',
+                    '#16a34a', '#22c55e', '#4ade80',
+                    '#f59e0b', '#fbbf24',
+                    '#dc2626', '#ef4444'
+                ]
             }]
         }
     });
 
-    // Pie chart - rôles
+    // --------- CHART ROLES ----------
+    const userDistribution = @Html.Raw(Model.UserRoleDistributions);
+    const userLabels = userDistribution.map(x => x.Role);
+    const userData = userDistribution.map(x => x.TotalUser);
+
     new Chart(document.getElementById('rolesChart'), {
         type: 'pie',
         data: {
-            labels: ['Admin', 'Utilisateur', 'Manager'],
+            labels: userLabels,
             datasets: [{
-                data: [15, 70, 15],
+                data: userData,
                 backgroundColor: ['#7c3aed', '#2563eb', '#16a34a']
             }]
         }
     });
+</script>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    function exportPdf() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+
+        let y = 15;
+
+        // Titre
+        doc.setFontSize(16);
+        doc.text("Dashboard - Rapport", 14, y);
+        y += 8;
+
+        // Tableau
+        doc.setFontSize(12);
+        doc.text("Documents les plus téléchargés", 14, y);
+        y += 4;
+
+        doc.autoTable({
+            html: '#docsTable',
+            startY: y,
+            theme: 'grid',
+            headStyles: { fillColor: [37, 99, 235] },
+            styles: { fontSize: 9 }
+        });
+
+        y = doc.lastAutoTable.finalY + 10;
+
+        // Chart catégories
+        if (y > 200) {
+            doc.addPage();
+            y = 20;
+        }
+
+        doc.text("Téléchargements par catégorie", 14, y);
+        const catImg = document.getElementById('categoryChart').toDataURL('image/png', 1.0);
+        doc.addImage(catImg, 'PNG', 14, y + 5, 80, 80);
+
+        y += 95;
+
+        // Chart rôles
+        if (y > 200) {
+            doc.addPage();
+            y = 20;
+        }
+
+        doc.text("Distribution des rôles", 14, y);
+        const roleImg = document.getElementById('rolesChart').toDataURL('image/png', 1.0);
+        doc.addImage(roleImg, 'PNG', 14, y + 5, 80, 80);
+
+        doc.save("dashboard.pdf");
+    }
 </script>

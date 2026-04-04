@@ -16,6 +16,20 @@ namespace BackOffice.Data.Repositories
             _context = context;
         }
 
+
+        public async Task<List<UserRoleDistributionDto>> GetUserDistributionAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role != UserRole.Admin)
+                .GroupBy(u => u.Role)
+                .Select(g => new UserRoleDistributionDto
+                {
+                    Role = g.Key.ToString(),
+                    TotalUser = g.Count()
+                })
+                .ToListAsync();
+        }
+
         public async Task UpdateUserRoleAsync(User user)
         {
             var userEF = await _context.Users.FindAsync(user.Id);

@@ -14,6 +14,10 @@ namespace BackOffice.Services
         {
             _documentRepository = documentRepository;
         }
+
+
+        public async Task<List<Document>> GetMostPopularDocumentAsync(int top) => await _documentRepository.GetMostPopularDocumentAsync(top);
+        public async Task<List<CategoryDownloadsDto>> GetDownloadsByCategoryAsync() => await _documentRepository.GetDownloadsByCategoryAsync();
         public async Task ImportFromZipAsync(string zipPath)
         {
             if (!File.Exists(zipPath))

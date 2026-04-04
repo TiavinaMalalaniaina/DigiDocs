@@ -18,5 +18,8 @@ namespace BackOffice.Services
 
         public Task<List<User>> GetUsersAsync(string index, int page, int pageSize)
             =>  _repo.GetUsersAsync(index, page, pageSize);
+
+        public async Task<List<UserRoleDistributionDto>> GetUserDistributionAsync()
+            => await _repo.GetUserDistributionAsync();
     }
 }

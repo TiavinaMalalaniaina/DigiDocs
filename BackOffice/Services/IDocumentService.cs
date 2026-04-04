@@ -11,5 +11,7 @@ namespace BackOffice.Services
         Task UpdateDocumentAsync(Document document);
         Task DeleteDocumentAsync(int id);
         Task ImportFromZipAsync(string zipPath);
+        Task<List<Document>> GetMostPopularDocumentAsync(int top);
+        Task<List<CategoryDownloadsDto>> GetDownloadsByCategoryAsync();
     }
 }

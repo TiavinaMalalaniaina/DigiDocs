@@ -8,5 +8,6 @@ namespace BackOffice.Data.Repositories
         Task<List<User>> GetUsersAsync(string index, int page, int pageSize);
         Task<int> GetCountAsync();
         Task UpdateUserRoleAsync(User user);
+        Task<List<UserRoleDistributionDto>> GetUserDistributionAsync();
     }
 }

@@ -24,24 +24,32 @@
             <h1 class="text-xl sm:text-2xl font-semibold text-gray-900">Tous les documents</h1>
         </div>
         <div class="block sm:flex items-center md:divide-x md:divide-gray-100">
-            <form class="sm:pr-3 mb-4 sm:mb-0" action="#" method="GET">
+            <form class="sm:pr-3 mb-4 sm:mb-0" method="GET">
                 <label for="products-search" class="sr-only">Recherche</label>
                 <div class="mt-1 relative sm:w-64 xl:w-96">
-                    <input type="text" name="email" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Recherche de documents">
+                    <input type="text" name="index" asp-for="Index" id="products-search" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Recherche de documents">
                 </div>
             </form>
             <div class="flex items-center sm:justify-end w-full">
                 <form method="post" enctype="multipart/form-data" asp-page-handler="ImportZip" class="flex items-center">
                     <div class="overflow-hidden relative w-64 mt-4 mb-4">
-                        <button type="button" class="bg-blue hover:bg-blue-light text-white font-bold py-2 px-4 w-full inline-flex items-center">
-                            <svg fill="#FFF" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+                        <button type="button" id="import-btn" class="bg-blue hover:bg-blue-light rounded-lg font-bold py-2 px-4 w-full inline-flex items-center border border-gray-300">
+                            <svg fill="#111" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M0 0h24v24H0z" fill="none" />
                                 <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
                             </svg>
                             <span class="ml-2">Importer les documents</span>
                         </button>
-                        <input asp-for ="ZipFile" type="file" id="zip-file" accept=".zip" class="cursor-pointer absolute block py-2 px-4 w-full opacity-0 pin-r pin-t">
+
+                        <input asp-for="ZipFile" type="file" id="zip-file" accept=".zip" class="hidden" />
                     </div>
+
+                    <script>
+                        document.getElementById('import-btn').addEventListener('click', function() {
+                            document.getElementById('zip-file').click();
+                        });
+                    </script>
+
                     <button type="submit" class="mt-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700">Importer</button>
                 </form>
                 <button type="button" data-modal-toggle="add-product-modal" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto">
@@ -109,12 +117,25 @@
                                 <td class="p-4 whitespace-nowrap text-base font-medium text-gray-900">@doc.AccessLevel</td>
                                 <td class="p-4 whitespace-nowrap space-x-2">
                                     <a asp-page-handler="Download" asp-route-id="@doc.Id" class="text-white bg-green-600 hover:bg-green-700 rounded-lg px-3 py-2 text-sm inline-flex items-center">
-                                        <svg class="mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M3 14a1 1 0 011-1h4v-4a1 1 0 112 0v4h4a1 1 0 110 2H10v4a1 1 0 11-2 0v-4H4a1 1 0 01-1-1z" />
-                                        </svg>
-                                        Télécharger
+                                        <button type="button" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+                                            <svg class="mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M3 14a1 1 0 011-1h4v-4a1 1 0 112 0v4h4a1 1 0 110 2H10v4a1 1 0 11-2 0v-4H4a1 1 0 01-1-1z" />
+                                            </svg>
+                                            Télécharger
+                                        </button>
                                     </a>
-                                    <button type="button" data-modal-toggle="product-modal" class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
+
+                                        
+                                    <button type="button" 
+                                        class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
+                                        data-modal-toggle="edit-document-modal" 
+                                        data-id="@doc.Id"
+                                        data-title="@doc.Title"
+                                        data-category="@doc.Category"
+                                        data-description="@doc.Description"
+                                        data-accesslevel="@doc.AccessLevel"
+                                        id="edit-button"
+                                    >
                                         <svg class="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                                         Modifier
                                     </button>
@@ -180,7 +201,7 @@
 </div>
 
 <!-- Edit Docs Modal -->
-<div class="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="product-modal">
+<div class="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="edit-document-modal">
     <div class="relative w-full max-w-2xl px-4 h-full md:h-auto">
         <!-- Modal content -->
         <div class="bg-white rounded-lg shadow relative">
@@ -189,42 +210,39 @@
                 <h3 class="text-xl font-semibold">
                     Modification du Document
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="product-modal">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="edit-document-modal">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
             <!-- Modal body -->
             <div class="p-6 space-y-6">
-                <form action="#">
+                <form method="post" enctype="multipart/form-data" asp-page-handler="Edit">
                     <div class="grid grid-cols-6 gap-6">
+
+                        <input asp-for="AddDocument.Title" id="edit-id" hidden />
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="doc-name" class="text-sm font-medium text-gray-900 block mb-2">Nom Du Document</label>
-                            <input type="text" name="doc-name" id="doc-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="namedoc.ext" required>
+                            <label for="Title" class="text-sm font-medium text-gray-900 block mb-2">Nom Du Document</label>
+                            <input asp-for="EditDocument.Title" id="edit-title" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
                         </div>
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="category" class="text-sm font-medium text-gray-900 block mb-2">Category</label>
-                            <select name="category" id="category" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
-                                <option value="education">Education</option>
-                                <option value="presentation">Presentation</option>
-                                <option value="business">Business</option>
+                            <label for="Category" class="text-sm font-medium text-gray-900 block mb-2">Catégorie</label>
+                            <input asp-for="EditDocument.Category" id="edit-category" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
+                        </div>
+                        <div class="col-span-full">
+                            <label for="AccessLevel" class="text-sm font-medium text-gray-900 block mb-2">Niveau</label>
+                            <select asp-for="EditDocument.AccessLevel" id="edit-access-level" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5">
+                                <option value="Standard">Standard</option>
+                                <option value="Premium">Premium</option>
+                                <option value="VIP">VIP</option>
                             </select>
                         </div>
                         <div class="col-span-full">
-                            <label for="level" class="text-sm font-medium text-gray-900 block mb-2">Niveau</label>
-                            <select name="level" id="level" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required>
-                                <option value="basic">Basic</option>
-                                <option value="premium">Premium</option>
-                                <option value="vip">VIP</option>
-                            </select>
-                        </div>
-                        <div class="col-span-full">
-                            <label for="doc-details" class="text-sm font-medium text-gray-900 block mb-2">Description</label>
-                            <textarea id="doc-details" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" placeholder="e.g. Document de présentation de la performance d'un enseignement"></textarea>
+                            <label for="Description" class="text-sm font-medium text-gray-900 block mb-2">Description</label>
+                            <textarea asp-for="EditDocument.Description" id="edit-description" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"></textarea>
                         </div>
                     </div>
-                    <!-- Modal footer -->
                     <div class="p-6 border-t border-gray-200 rounded-b">
-                        <button class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="submit">Enregistrer</button>
+                        <button type="submit" class="text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg text-sm px-5 py-2.5">Nouveau Document</button>
                     </div>
                 </form>
             </div>
@@ -245,27 +263,27 @@
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6 sm:col-span-3">
                             <label for="Title" class="text-sm font-medium text-gray-900 block mb-2">Nom Du Document</label>
-                            <input asp-for="Title" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
+                            <input asp-for="AddDocument.Title" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="Category" class="text-sm font-medium text-gray-900 block mb-2">Catégorie</label>
-                            <input asp-for="Category" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
+                            <input asp-for="AddDocument.Category" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required />
                         </div>
                         <div class="col-span-full">
                             <label for="AccessLevel" class="text-sm font-medium text-gray-900 block mb-2">Niveau</label>
-                            <select asp-for="AccessLevel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5">
-                                <option value="Basic">Basic</option>
+                            <select asp-for="AddDocument.AccessLevel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5">
+                                <option value="Standard">Standard</option>
                                 <option value="Premium">Premium</option>
                                 <option value="VIP">VIP</option>
                             </select>
                         </div>
                         <div class="col-span-full">
                             <label for="UploadFile" class="text-sm font-medium text-gray-900 block mb-2">Fichier</label>
-                            <input asp-for="UploadFile" type="file" class="block w-full text-sm text-gray-900 rounded-lg border border-gray-300 p-2.5" required />
+                            <input asp-for="AddDocument.FileData" type="file" class="block w-full text-sm text-gray-900 rounded-lg border border-gray-300 p-2.5" required />
                         </div>
                         <div class="col-span-full">
                             <label for="Description" class="text-sm font-medium text-gray-900 block mb-2">Description</label>
-                            <textarea asp-for="Description" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"></textarea>
+                            <textarea asp-for="AddDocument.Description" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"></textarea>
                         </div>
                     </div>
                     <div class="p-6 border-t border-gray-200 rounded-b">
@@ -302,3 +320,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('[data-modal-toggle="edit-document-modal"]').forEach(button => {
+        button.addEventListener('click', () => {
+            document.getElementById('edit-title').value = button.dataset.title;
+            document.getElementById('edit-category').value = button.dataset.category;
+            document.getElementById('edit-access-level').value = button.dataset.accesslevel;
+            document.getElementById('edit-description').value = button.dataset.description;
+            document.getElementById('edit-id').value = button.dataset.id;
+            console.log(button.dataset.accessLevel);
+        });
+    });
+</script>

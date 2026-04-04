@@ -15,6 +15,26 @@ namespace BackOffice.Data.Repositories
             _context = context;
         }
 
+        public async Task<List<Document>> GetMostPopularDocumentAsync(int top = 5)
+        {
+            return await _context.Documents
+                         .OrderByDescending(d => d.DownloadCount)
+                         .Take(top)
+                         .ToListAsync();
+        }
+
+        public async Task<List<CategoryDownloadsDto>> GetDownloadsByCategoryAsync()
+        {
+            return await _context.Documents
+                .GroupBy(d => d.Category) 
+                .Select(g => new CategoryDownloadsDto
+                {
+                    Category = g.Key,
+                    TotalDownloads = g.Sum(d => d.DownloadCount)
+                })
+                .ToListAsync();
+        }
+
         public async Task<int> GetCountAsync()
         {
             return await _context.Users.CountAsync();
@@ -23,6 +43,7 @@ namespace BackOffice.Data.Repositories
         public async Task<List<Document>> GetDocumentsAsync(string? index, int pageNumber, int pageSize)
         {
             var query = _context.Documents.AsQueryable();
+            Console.WriteLine("INDEX: " + index);
 
             if (!string.IsNullOrWhiteSpace(index))
             {

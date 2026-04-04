@@ -12,5 +12,7 @@ namespace BackOffice.Data.Repositories
         Task<int> GetCountAsync();
         Task<List<Document>> GetDocumentsAsync(string index, int pageNumber, int pageSize);
         Task<Document> GetDocumentByIdAsync(int id);
+        Task<List<Document>> GetMostPopularDocumentAsync(int top);
+        Task<List<CategoryDownloadsDto>> GetDownloadsByCategoryAsync();
     }
 }

@@ -6,5 +6,6 @@ namespace BackOffice.Services
         Task<int> GetUserCountAsync();
         Task<List<User>> GetUsersAsync(string index, int page, int pageSize);
         Task UpdateUserRoleAsync(User user);
+        Task<List<UserRoleDistributionDto>> GetUserDistributionAsync();
     }
 }

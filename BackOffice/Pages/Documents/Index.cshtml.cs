@@ -14,6 +14,12 @@ namespace BackOffice.Pages.Documents
         public IList<Document> Documents { get; set; } = new List<Document>();
 
         [BindProperty]
+        public AddDocumentModel AddDocument { get; set; } = new AddDocumentModel();
+
+        [BindProperty]
+        public EditDocumentModel EditDocument{ get; set; } = new EditDocumentModel();
+
+        [BindProperty]
         public string Title { get; set; } = string.Empty;
 
         [BindProperty]
@@ -23,7 +29,7 @@ namespace BackOffice.Pages.Documents
         public string Description { get; set; } = string.Empty;
 
         [BindProperty]
-        public string AccessLevel { get; set; } = "Basic";
+        public string AccessLevel { get; set; } = "Standard";
 
         [BindProperty]
         public IFormFile? UploadFile { get; set; }
@@ -35,7 +41,7 @@ namespace BackOffice.Pages.Documents
         public int TotalPages => (int)Math.Ceiling((double)TotalDocuments / PageSize);
 
         [BindProperty(SupportsGet = true)]
-        public string Index { get; set; }
+        public string Index { get; set; } = string.Empty;
 
         [BindProperty]
         public IFormFile? ZipFile { get; set; }
@@ -70,12 +76,25 @@ namespace BackOffice.Pages.Documents
         {
             PageNumber = pageNumber ?? 1;
             TotalDocuments = await _documentService.GetCountAsync();
-            Documents = await _documentService.GetDocumentASync(String.Empty, PageNumber, PageSize);
+            Documents = await _documentService.GetDocumentASync(Index, PageNumber, PageSize);
+        }
+
+        public async Task<IActionResult> OnPostEditAsync()
+        {
+            var document = new Document
+            {
+                Title = EditDocument.Title,
+                Category = EditDocument.Category,
+                Description = EditDocument.Description,
+                AccessLevel = EditDocument.AccessLevel
+            };
+            await _documentService.UpdateDocumentAsync(document);
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostAddAsync()
         {
-            if (UploadFile == null || UploadFile.Length == 0)
+            if (AddDocument.FileData == null)
             {
                 ModelState.AddModelError("UploadFile", "Veuillez sélectionner un fichier.");
                 await OnGetAsync(PageNumber);
@@ -83,17 +102,17 @@ namespace BackOffice.Pages.Documents
             }
 
             using var ms = new MemoryStream();
-            await UploadFile.CopyToAsync(ms);
+            await AddDocument.FileData.CopyToAsync(ms);
 
             var document = new Document
             {
-                Title = Title,
-                Category = Category,
-                Description = Description,
-                AccessLevel = AccessLevel,
+                Title = AddDocument.Title,
+                Category = AddDocument.Category,
+                Description = AddDocument.Description,
+                AccessLevel = AddDocument.AccessLevel,
                 FileData = ms.ToArray(),
-                FileName = UploadFile.FileName,
-                ContentType = GetContentType(UploadFile.FileName)
+                FileName = AddDocument.FileData.FileName,
+                ContentType = GetContentType(AddDocument.FileData.FileName)
             };
 
             await _documentService.AddDocumentAsync(document);
