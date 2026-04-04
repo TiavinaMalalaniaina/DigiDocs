@@ -90,12 +90,7 @@ namespace BackOffice.Data.Repositories
 
             // Mettre à jour les champs
             existingDocument.Title = document.Title;
-            existingDocument.UploadDate = document.UploadDate;
-            existingDocument.DownloadCount = document.DownloadCount;
-            existingDocument.FileData = document.FileData;
-            existingDocument.FileName = document.FileName;
             existingDocument.Category = document.Category;
-            existingDocument.ContentType = document.ContentType;
             existingDocument.Description = document.Description;
             existingDocument.AccessLevel = document.AccessLevel;
 

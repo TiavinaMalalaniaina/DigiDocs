@@ -83,6 +83,7 @@ namespace BackOffice.Pages.Documents
         {
             var document = new Document
             {
+                Id = EditDocument.Id,
                 Title = EditDocument.Title,
                 Category = EditDocument.Category,
                 Description = EditDocument.Description,

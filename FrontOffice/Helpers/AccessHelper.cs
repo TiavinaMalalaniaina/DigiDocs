@@ -4,7 +4,7 @@ namespace FrontOffice.Helpers
     {
         public static int GetRoleLevel(string role)
         {
-            return role switch
+            return role?.ToLower() switch
             {
                 "standard" => 1,
                 "premium" => 2,
